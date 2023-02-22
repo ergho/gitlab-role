@@ -1,0 +1,18 @@
+---
+# defaults file for gitlab
+gitlab_dependencies:
+  - openssh-server
+  - postfix
+  - curl
+  - tzdata
+  - openssl
+  - gnupg2
+  - perl
+  - ca-certificates
+
+# Setup with CE right now just change ce to ee for ee edition
+gitlab_edition: "gitlab-ce"
+gitlab_version: "15.8.3-ce.0"
+
+gitlab_repo_url: "https://packages.gitlab.com/install/repositories/gitlab/{{ gitlab_edition }}/script.deb.sh"
+gitlab_validate_certs: true
