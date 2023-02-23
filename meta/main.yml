@@ -1,7 +1,7 @@
 galaxy_info:
   author: ergho
-  namespace: ergho
   description: Installs gitlab
+  role_name: gitlab
 
   license: "MIT"
 

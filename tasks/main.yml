@@ -1,11 +1,13 @@
 ---
 # tasks file for gitlab
 - name: Check if configuration file exists
-  ansible.builtin.stat: path=/etc/gitlab/gitlab.rb
+  ansible.builtin.stat: 
+    path: /etc/gitlab/gitlab.rb
   register: gitlab_config_file
 
 - name: Check if Gitlab is installed
-  ansible.builtin.stat: path=/usr/bin/gitlab-ctl
+  ansible.builtin.stat: 
+    path: /usr/bin/gitlab-ctl
   register: gitlab_file
 
 - name: Dependencies
@@ -14,17 +16,21 @@
     state: present
 
 # TODO: Replace with artifactory setup instead
-- name: Download Gitlab Repo script
-  ansible.builtin.get_url:
-    url: "{{ gitlab_repo_url }}"
-    dest: "/tmp/gitlab_install_repo.sh"
-    validate_certs: "{{ gitlab_validate_certs }}"
-
-- name: Install Gitlab Repo
-  ansible.builtin.command: bash /tmp/gitlab_install_repo.sh
-  register: output
+- name: Download and Install Gitlab Repo
   when: not gitlab_file.stat.exists
+  block:
+    - name: Download Gitlab Repo
+      ansible.builtin.get_url:
+        url: "{{ gitlab_repo_url }}"
+        dest: "/tmp/gitlab_install_repo.sh"
+        validate_certs: "{{ gitlab_validate_certs }}"
+        mode: "0755"
 
+    - name: Install Gitlab Repo
+      ansible.builtin.command: 
+        cmd: bash /tmp/gitlab_install_repo.sh
+      register: output
+      changed_when: not gitlab_file.stat.exists
 
 # Change edition to install CE or EE and choose appropriate version
 - name: Gitlab Package name
@@ -39,4 +45,3 @@
   async: 300
   poll: 5
   when: not gitlab_file.stat.exists
-

@@ -3,9 +3,13 @@ dependency:
   name: galaxy
 driver:
   name: podman
+lint: |
+  set -e
+  yamllint -f colored .
+  ansible-lint --force-color .
 platforms:
   - name: ubuntu
-    image: localhost/ergho:latest
+    image: localhost/ubuntu:latest
     tmpfs:
       - /run
       - /tmp
@@ -18,13 +22,20 @@ provisioner:
   name: ansible
   config_options:
     defaults:
-      interpreter_python: auto_silent
-      callback_whitelist: profile_tasks, timer, yaml
+      #stdout_callback: 'yaml'
+      bin_ansible_callbacks: true
+      interpreter_python: 'python3'
+      verbosity: 1
     ssh_connection:
       pipelining: false
+  options:
+    vvv: true
+  env:
+    PY_COLORS: true
+    ANSIBLE_FORCE_COLOR: true
+  lint: |
+    set -e
+    yamllint .
+    ansible-lint .
 verifier:
   name: ansible
-lint: |
-  set -e
-  yamllint .
-  ansible-lint .
