@@ -7,6 +7,9 @@ RUN apt-get update \
     apt-utils \
     build-essential \
     locales \
+    libffi-dev \
+    libssl-dev \
+    libyaml-dev \
     python3-dev \
     python3-setuptools \
     python3-pip \

@@ -11,26 +11,51 @@
   register: gitlab_file
 
 - name: Dependencies
-  ansible.builtin.package:
+  ansible.builtin.apt:
     name: "{{ gitlab_dependencies }}"
     state: present
+    update_cache: true
+  retries: 10
+  delay: 5
+  when: ansible_os_family == "Debian"
 
 # TODO: Replace with artifactory setup instead
 - name: Download and Install Gitlab Repo
-  when: not gitlab_file.stat.exists
   block:
-    - name: Download Gitlab Repo
+    - name: Add Gitlab Repo GPG key
+      ansible.builtin.apt_key:
+        url: https://packages.gitlab.com/gpg.key
+        state: present
+      register: result
+      retries: 2
+      delay: 3
+      until: result is success
+      when: ansible_os_family == "Debian"
+
+    - name: Download Gitlab Repo script
       ansible.builtin.get_url:
         url: "{{ gitlab_repo_url }}"
-        dest: "/tmp/gitlab_install_repo.sh"
-        validate_certs: "{{ gitlab_validate_certs }}"
+        dest: "{{ gitlab_repo_script_path }}"
         mode: "0755"
+      register: gitlab_repo_script
+      retries: 10
+      delay: 20
+
+    - name: Check if Repo file exists
+      ansible.builtin.stat:
+        path: "{{ gitlab_repo_path }}"
+      register: repo_file
+
 
     - name: Install Gitlab Repo
       ansible.builtin.command: 
-        cmd: bash /tmp/gitlab_install_repo.sh
-      register: output
-      changed_when: not gitlab_file.stat.exists
+        cmd: bash "{{ gitlab_repo_script_path }}"
+      register: result
+      retries: 2
+      delay: 10
+      until: result is success
+      when: gitlab_repo_script.changed or (not repo_file.stat.exists)
+      changed_when: false
 
 # Change edition to install CE or EE and choose appropriate version
 - name: Gitlab Package name
@@ -38,6 +63,14 @@
     gitlab_package_name: "{{ gitlab_edition }}={{ gitlab_version }}"
   when: gitlab_version | default(false)
 
+#- name: Unlock Gitlab package updates
+#  ansible.builtin.command:
+#    cmd: "apt-mark unhold {{ gitlab_edition }}"
+#  register: result
+#  retries: 2
+#  delay: 10
+#  until: result is success
+#
 - name: Install Gitlab
   ansible.builtin.package:
     name: "{{ gitlab_package_name | default(gitlab_edition) }}"
@@ -45,3 +78,40 @@
   async: 300
   poll: 5
   when: not gitlab_file.stat.exists
+
+#- name: Lock Gitlab package updates
+#  ansible.builtin.command:
+#    cmd: "apt-mark hold {{ gitlab_edition }}"
+#  register: result
+#  retries: 2
+#  delay: 10
+#  until: result is success
+
+# Might be better to do through gui as its only applicable on initial install
+#- name: Copy License file for Gitlab
+#  ansible.builtin.copy:
+#    src: "{{ gitlab_license_file }}"
+#    dest: "/etc/gitlab/{{ gitlab_license_file }}"
+#    owner: root
+#    group: root
+#    mode: "0600"
+#  when: gitlab_license_file | default(false)
+
+- name: Copy in settings for Gitlab
+  ansible.builtin.template:
+    src: "{{ gitlab_config_template }}"
+    dest: /etc/gitlab/gitlab.rb
+    owner: root
+    group: root
+    mode: "0600"
+  changed_when: false
+
+
+- name: Reconfigure Gitlab
+  ansible.builtin.command:
+    cmd: gitlab-ctl reconfigure
+  retries: 3
+  register: result
+  until: result is success
+  changed_when: false
+  failed_when: false

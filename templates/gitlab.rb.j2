@@ -1,1 +1,14 @@
-placeholder
+
+# external url to access instance
+external_url = "{{ gitlab_external_url }}"
+
+# directory to store Git Repos.
+git_data_dirs({"defualt" => {"path" => "{{ gitlab_git_data_dir }}"} })
+
+#Ldap settings for gitlab
+# info about settings here https://gitlab.com/gitlab-org/gitlab-foss/-/blob/master/config/gitlab.yml.example#L715
+gitlab_rails["ldap_enabled"] = {{ gitlab_ldap_enabled | lower }}
+
+# Do more here when have ldap host available
+{% if gitlab_ldap_enabled %}
+{% endif %}
