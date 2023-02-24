@@ -57,6 +57,26 @@
       when: gitlab_repo_script.changed or (not repo_file.stat.exists)
       changed_when: false
 
+- name: Gitlab pre create gitlab directory if missing
+  ansible.builtin.file:
+    path: "/etc/gitlab"
+    owner: root
+    group: root
+    mode: "0775"
+    state: directory
+
+- name: Check if configuration file exists
+  ansible.builtin.stat: 
+    path: /etc/gitlab/skip-unmigrated-data-check
+  register: gitlab_skip_unmigrated_file
+
+- name: Gitlab skip unmigrated data check
+  ansible.builtin.file:
+    path: /etc/gitlab/skip-unmigrated-data-check
+    state: touch
+    mode: "0755"
+  when: not gitlab_skip_unmigrated_file.stat.exists
+
 # Change edition to install CE or EE and choose appropriate version
 - name: Gitlab Package name
   ansible.builtin.set_fact:
@@ -115,3 +135,4 @@
   until: result is success
   changed_when: false
   failed_when: false
+  when: gitlab_config_file.stat.exists
