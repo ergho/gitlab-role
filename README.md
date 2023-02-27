@@ -1,38 +1,76 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Installs and configure a basic gitlab omnibus install
 
-Requirements
+Molecule
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Molecule is a tool to help testing, linting etc to ensure the role is fulfilling
+some basic requirements.
 
-Role Variables
---------------
+To setup environment to run Molecule tests ensure python is installed on machine.
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Create a virtualenv for your work:
+```bash
+    python3 -m venv /path/to/your/venv
+```
 
-Dependencies
-------------
+Then we proceed to install the requirements for what we are using.
+This is configured to require podman with how this is setup but you could use docker.
+It would require changes in the `/molecule/default/molecule.yaml to use the docker driver.
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+```bash
+    source /path/to/your/venv/bin/activate
+    python3 -m pip install wheel
+    python3 -m pip install molecule[lint,podman,ansible]
+```
+
+Next step ensure the container image used by tests exists build it.
+
+```bash
+    podman build . -t ubuntu:latest
+```
+
+Now we can test that Molecule can create the environment needed to test.
+
+```bash
+    molecule Create
+```
+
+Then you can check that the container exists with:
+```bash
+    molecule list
+```
+
+To run linting `molecule lint` should show you the results
+
+To run the fullsuite of tasks with molecule you can run the following command
+
+```bash
+    molecule test
+```
+
+This will then run linting and creating and testing to run the role and then destroy the environment after.
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
+```yaml
     - hosts: servers
+      vars_files:
+        - vars/main.yaml
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: ergho.gitlab }
+```
+Then inside the vars_files you could use these for example.
 
-License
--------
+```
+    gitlab_external_url: "https://gl.example.org/"
+    gitlab_edition: "gitlab-ee"
+    gitlab_version: "15.8.3-ee.0"
+```
 
-BSD
 
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
