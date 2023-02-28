@@ -35,7 +35,7 @@ Next step ensure the container image used by tests exists build it.
 Now we can test that Molecule can create the environment needed to test.
 
 ```bash
-    molecule Create
+    molecule create
 ```
 
 Then you can check that the container exists with:
