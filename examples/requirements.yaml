@@ -1,0 +1,6 @@
+---
+roles:
+  - name: gitlab
+    src: https://github.com/ergho/gitlab-role.git
+    version: main
+    scm: git

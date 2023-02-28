@@ -1,0 +1,5 @@
+---
+- hosts: blank
+  roles:
+    - gitlab
+

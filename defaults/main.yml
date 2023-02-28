@@ -1,8 +1,8 @@
 ---
 # Gitlab Version and Repo Settings
 # Should change/override with different versions/settings later
-gitlab_edition: "gitlab-ce"
-gitlab_version: "15.8.3-ce.0"
+gitlab_edition: "gitlab-ee"
+gitlab_version: "15.8.3-ee.0"
 gitlab_repo_url: "https://packages.gitlab.com/install/repositories/gitlab/{{ gitlab_edition }}/script.deb.sh"
 gitlab_repo_path: "/etc/apt/sources.list.d/gitlab_{{ gitlab_edition }}.list"
 gitlab_repo_script_path: "/tmp/gitlab_repo_script.sh"
