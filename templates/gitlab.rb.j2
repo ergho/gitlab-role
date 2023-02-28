@@ -5,10 +5,48 @@ external_url = "{{ gitlab_external_url }}"
 # directory to store Git Repos.
 git_data_dirs({"defualt" => {"path" => "{{ gitlab_git_data_dir }}"} })
 
-#Ldap settings for gitlab
-# info about settings here https://gitlab.com/gitlab-org/gitlab-foss/-/blob/master/config/gitlab.yml.example#L715
+# gitlab timezone
+gitlab_rails["time_zone"] = "{{ gitlab_time_zone }}"
+
+# gitlab default theme
+gitlab_rails["gitlab_default_theme"] = "{{ gitlab_default_theme }}"
+
+# Ldap settings for gitlab
+# You can see more about the configuration options here.
+# https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/files/gitlab-config-template/gitlab.rb.template#L498
 gitlab_rails["ldap_enabled"] = {{ gitlab_ldap_enabled | lower }}
 
-# Do more here when have ldap host available
 {% if gitlab_ldap_enabled %}
 {% endif %}
+
+# Temporary for current environment
+letsencrypt['enable'] = {{ gitlab_letsencrypt_enable | lower }}
+
+{% if gitlab_letsencrypt_enable %}
+letsencrypt['contact_emails'] = {{ gitlab_letsencrypt_contact_emails | to_json }}
+letsencrypt['auto_renew_hour'] = "{{ gitlab_letsencrypt_auto_renew_hour }}"
+letsencrypt['auto_renew_day_of_month'] = "{{ gitlab_letsencrypt_auto_renew_day_of_month }}"
+letsencrypt['auto_renew'] = {{ gitlab_letsencrypt_auto_renew | lower }}
+{% endif %}
+
+
+# Nginx settings 
+nginx["redirect_http_to_https"] = {{ gitlab_redirect_http_to_https | lower }}
+
+{% if gitlab_nginx_listen_port is defined %}
+nginx["listen_port"] = "{{ gitlab_nginx_listen_port }}"
+{% endif %}
+
+{% if gitlab_nginx_https_port is defined %}
+nginx["listen_https"] = "{{ gitlab_nginx_https }}"
+{% endif %}
+
+# Backup Settings
+#  Docs: https://docs.gitlab.com/omnibus/settings/backups.html
+gitlab_rails["backup_path"] =  "{{ gitlab_backup_path }}"
+gitlab_rails["backup_keep_time"] = "{{ gitlab_backup_keep_time }}"
+
+# Smtp config
+
+# Gitlab Registry
+

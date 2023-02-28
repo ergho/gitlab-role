@@ -12,14 +12,13 @@ gitlab_repo_script_path: "/tmp/gitlab_repo_script.sh"
 gitlab_domain: defaultvalue
 gitlab_external_url: "https://{{ gitlab_domain }}"
 gitlab_git_data_dir: "/var/opt/gitlab/git-data"
+gitlab_backup_path: "/var/opt/gitlab/backups"
+gitlab_backup_keep_time: "604800"
 gitlab_config_template: "gitlab.rb.j2"
 
+gitlab_default_theme: "1"
 
-#gitlab_timezone:
-#
-
-# Might be easier to do this with gui and it only works on initial setup
-#gitlab_license_file:
+gitlab_time_zone: "UTC"
 
 # LDAP
 gitlab_ldap_enabled: false
@@ -34,7 +33,6 @@ gitlab_ldap_enabled: false
 # SMTP
 gitlab_smtp_enabled: false
 
-
 # Dependencies
 gitlab_dependencies:
   - aptitude
@@ -44,3 +42,14 @@ gitlab_dependencies:
   - tzdata
   - ca-certificates
   - gnupg
+
+
+gitlab_redirect_http_to_https: true
+#gitlab_nginx_listen_port: 80
+#gitlab_nginx_https: 443
+
+gitlab_letsencrypt_enable: false
+gitlab_letsencrypt_auto_renew: false
+gitlab_letsencrypt_contact_emails: ""
+gitlab_letsencrypt_auto_renew_hour: 0
+gitlab_letsencrypt_auto_renew_day: "*/7"

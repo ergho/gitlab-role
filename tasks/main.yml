@@ -135,4 +135,4 @@
   until: result is success
   changed_when: false
   failed_when: false
-  when: gitlab_config_file.stat.exists
+  when: not gitlab_config_file.stat.exists
