@@ -1,0 +1,19 @@
+---
+# Gitlab Version and Repo Settings
+gitlab_repo_url: "https://packages.gitlab.com/install/repositories/gitlab/{{ gitlab_edition }}/script.deb.sh"
+gitlab_repo_path: "/etc/apt/sources.list.d/gitlab_{{ gitlab_edition }}.list"
+gitlab_repo_script_path: "/tmp/gitlab_repo_script.sh"
+
+# General Config
+
+gitlab_domain: 
+gitlab_external_url: "https://{{ gitlab_domain }}"
+gitlab_git_data_dir: "/var/opt/gitlab/git-data"
+
+gitlab_time_zone: "Europe/Stockholm"
+
+gitlab_letsencrypt_enable: true
+gitlab_letsencrypt_contact_emails: 
+gitlab_letsencrypt_auto_renew: false
+
+gitlab_default_theme: "2"
