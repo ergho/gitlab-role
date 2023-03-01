@@ -54,7 +54,7 @@ gitlab_dependencies:
 
 
 gitlab_registry_enable: false
-gitlab_kas_enable: false
+gitlab_kas_enabled: false
 
 gitlab_redirect_http_to_https: true
 #gitlab_nginx_listen_port: 80
