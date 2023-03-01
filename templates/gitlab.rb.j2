@@ -1,6 +1,6 @@
 
 # external url to access instance
-external_url = "{{ gitlab_external_url }}"
+external_url "{{ gitlab_external_url }}"
 
 # directory to store Git Repos.
 git_data_dirs({"defualt" => {"path" => "{{ gitlab_git_data_dir }}"} })
