@@ -20,13 +20,13 @@ gitlab_rails["ldap_enabled"] = {{ gitlab_ldap_enabled | lower }}
 {% endif %}
 
 # Temporary for current environment
-letsencrypt['enable'] = {{ gitlab_letsencrypt_enable | lower }}
+letsencrypt["enable"] = {{ gitlab_letsencrypt_enable | lower }}
 
 {% if gitlab_letsencrypt_enable %}
-letsencrypt['contact_emails'] = {{ gitlab_letsencrypt_contact_emails | to_json }}
-letsencrypt['auto_renew_hour'] = "{{ gitlab_letsencrypt_auto_renew_hour }}"
-letsencrypt['auto_renew_day_of_month'] = "{{ gitlab_letsencrypt_auto_renew_day_of_month }}"
-letsencrypt['auto_renew'] = {{ gitlab_letsencrypt_auto_renew | lower }}
+letsencrypt["contact_emails"] = {{ gitlab_letsencrypt_contact_emails | to_json }}
+letsencrypt["auto_renew_hour"] = "{{ gitlab_letsencrypt_auto_renew_hour }}"
+letsencrypt["auto_renew_day_of_month"] = "{{ gitlab_letsencrypt_auto_renew_day_of_month }}"
+letsencrypt["auto_renew"] = {{ gitlab_letsencrypt_auto_renew | lower }}
 {% endif %}
 
 
@@ -46,7 +46,23 @@ nginx["listen_https"] = "{{ gitlab_nginx_https }}"
 gitlab_rails["backup_path"] =  "{{ gitlab_backup_path }}"
 gitlab_rails["backup_keep_time"] = "{{ gitlab_backup_keep_time }}"
 
+# Gitlab KAS
+gitlab_rails["gitlab_kas_enabled"] = {{ gitlab_kas_enabled | lower }}
+gitlab_kas["enable"] = {{ gitlab_kas_enabled | lower }}
 # Smtp config
+gitlab_rails["smtp_enable"] = {{ gitlab_smtp_enabled | lower }}
+{% if gitlab_smtp_enabled %}
+gitlab_rails["smtp_address"] = "{{ gitlab_smtp_address }}"
+gitlab_rails["smtp_port"] = "{{ gitlab_smtp_port }}"
+gitlab_rails["smtp_user_name"] = "{{ gitlab_smtp_user_name }}"
+gitlab_rails["smtp_password"] = "{{ gitlab_smtp_password }}"
+gitlab_rails["smtp_domain"] = "{{ gitlab_smtp_domain }}"
+gitlab_rails["smtp_authentication"] = "{{ gitlab_smtp_authentication }}"
+gitlab_rails["smtp_enable_starttls_auto"] = "{{ gitlab_smtp_starttls_auto }}"
+gitlab_rails["smtp_tls"] = {{ gitlab_smtp_tls | lower }}
+gitlab_rails["smtp_pool"] = "{{ gitlab_smtp_pool }}"
+{% endif %}
+#
 
 # Gitlab Registry
-
+gitlab_rails["registry_enabled"] = {{ gitlab_registry_enable | lower }}
