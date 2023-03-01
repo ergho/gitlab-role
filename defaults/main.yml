@@ -64,4 +64,4 @@ gitlab_letsencrypt_enable: false
 gitlab_letsencrypt_auto_renew: false
 gitlab_letsencrypt_contact_emails: ""
 gitlab_letsencrypt_auto_renew_hour: 0
-gitlab_letsencrypt_auto_renew_day: "*/7"
+gitlab_letsencrypt_auto_renew_day_of_month: "*/7"
