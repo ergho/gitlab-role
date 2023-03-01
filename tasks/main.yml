@@ -130,9 +130,6 @@
 - name: Reconfigure Gitlab
   ansible.builtin.command:
     cmd: gitlab-ctl reconfigure
-  retries: 3
-  register: result
-  until: result is success
   changed_when: false
   failed_when: false
   when: not gitlab_config_file.stat.exists

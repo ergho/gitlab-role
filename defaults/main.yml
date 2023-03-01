@@ -57,6 +57,8 @@ gitlab_registry_enable: false
 gitlab_kas_enabled: false
 
 gitlab_redirect_http_to_https: true
+gitlab_ssl_certificate: "/etc/gitlab/ssl/{{ gitlab_domain }}.crt"
+gitlab_ssl_certificate_key: "/etc/gitlab/ssl/{{ gitlab_domain }}.key"
 #gitlab_nginx_listen_port: 80
 #gitlab_nginx_https: 443
 
