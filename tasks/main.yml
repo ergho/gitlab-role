@@ -130,6 +130,4 @@
 - name: Reconfigure Gitlab
   ansible.builtin.command:
     cmd: gitlab-ctl reconfigure
-  changed_when: false
-  failed_when: false
   when: not gitlab_config_file.stat.exists
