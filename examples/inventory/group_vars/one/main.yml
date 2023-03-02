@@ -12,7 +12,10 @@ gitlab_git_data_dir: "/var/opt/gitlab/git-data"
 
 gitlab_time_zone: "Europe/Stockholm"
 
-gitlab_letsencrypt_enable: true
+gitlab_redirect_http_to_https: true
+gitlab_ssl_certificate: 
+gitlab_ssl_key: 
+gitlab_letsencrypt_enable: false
 gitlab_letsencrypt_contact_emails: 
 gitlab_letsencrypt_auto_renew: false
 
