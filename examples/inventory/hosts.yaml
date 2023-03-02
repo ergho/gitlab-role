@@ -10,7 +10,7 @@ gitlab:
           ansible_host:
     two:
       vars:
-        ansible_user: stenmale
+        ansible_user: 
         ansible_ssh_port: 22
       hosts:
         gitlab-two:
