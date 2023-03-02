@@ -72,5 +72,4 @@ Then inside the vars_files you could use these for example.
     gitlab_edition: "gitlab-ee"
     gitlab_version: "15.8.3-ee.0"
 ```
-
-
+There's also an actual example in the examples folder how this could actually be deployed
